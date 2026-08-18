@@ -76,3 +76,14 @@ class Node <T> {
         return Objects.hash(content);
     }
 }
+
+
+class DNode<T> extends Node<T> {
+    DNode<T> prev;
+
+    public DNode(T content) {
+        super(content);
+        this.prev = null;
+    }
+
+}
