@@ -8,11 +8,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ListSelectionTest {
 
     @Test
-    @DisplayName("Create SimplyLinkedList")
+    @DisplayName("Create SimplyLinkedList:LIFO")
     void SimplyLinkedList() {
         ListFactory factory = ListFactory.getInstance();
 
-        CustomList<String> simplyLinkedList = factory.createList(ListFactory.ListType.SINGLY);
+        CustomList<String> simplyLinkedList = factory.createList(ListFactory.ListType.SINGLY_LIFO);
 
         simplyLinkedList.append("A");
         simplyLinkedList.append("B");
@@ -22,11 +22,11 @@ class ListSelectionTest {
     }
 
     @Test
-    @DisplayName("Create DoublyLinkedList")
+    @DisplayName("Create DoublyLinkedList:LIFO")
     void doublyLinkedList() {
         ListFactory factory = ListFactory.getInstance();
 
-        CustomList<Integer> doublyLinkedList = factory.createList(ListFactory.ListType.DOUBLY);
+        CustomList<Integer> doublyLinkedList = factory.createList(ListFactory.ListType.DOUBLY_LIFO);
 
         doublyLinkedList.append(10);
         doublyLinkedList.append(20);
