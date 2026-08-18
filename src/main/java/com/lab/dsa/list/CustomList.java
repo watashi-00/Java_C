@@ -126,7 +126,7 @@ class SinglyLinkedListFIFO<T> implements CustomList<T> {
         if(head == null) {
             head = tail = node;
         } else {
-            tail.next = head;
+            tail.next = node;
             tail = node;
         }
         size++;
@@ -154,6 +154,55 @@ class SinglyLinkedListFIFO<T> implements CustomList<T> {
 
     @Override
     public boolean isEmpty() { return size == 0; }
+}
+
+class DoublyLinkedListFIFO<T> implements CustomList<T> {
+    DNode<T> head;
+    DNode<T> tail;
+    private int size;
+    
+    @Override
+    public void append(T element) {
+        //noinspection DuplicatedCode
+        DNode<T> node = new DNode<>(element);
+        if (head == null) {
+            head = tail = node;
+        } else {
+            tail.next = node; 
+            node.prev = tail;
+            tail = node;
+        }
+        size++;
+    }
+
+    @Override
+    public T pop() {
+        
+        if(head == null) return null;
+        
+        T value  = head.content;
+        
+        if(head == tail) {
+            head = tail = null;
+            size = 0;
+        } else {
+            head = head.next;
+            head.prev = null;
+        }
+        
+        size--;
+        return value;
+    }
+
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
 }
 
 class SinglyToDoublyAdapterLIFO<T> implements CustomList<T> {
@@ -202,7 +251,7 @@ class ListFactory {
             case SINGLY_LIFO -> new SinglyLinkedListLIFO<>();
             case DOUBLY_LIFO -> new DoublyLinkedListLIFO<>();
             case SINGLY_FIFO -> new SinglyLinkedListFIFO<>();
-            case DOUBLY_FIFO -> new DoublyLinkedListLIFO<>();
+            case DOUBLY_FIFO -> new DoublyLinkedListFIFO<>();
         };
     }
 
