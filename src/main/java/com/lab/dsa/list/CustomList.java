@@ -26,7 +26,7 @@ public interface CustomList<T> {
     boolean isEmpty();
 }
 
-class SinglyLinkedList<T> implements CustomList<T> {
+class SinglyLinkedListLIFO<T> implements CustomList<T> {
     private SNode<T> head;
     private SNode<T> tail;
     private int size;
@@ -73,7 +73,7 @@ class SinglyLinkedList<T> implements CustomList<T> {
     public boolean isEmpty() { return size == 0; }
 }
 
-class DoublyLinkedList<T> implements CustomList<T> {
+class DoublyLinkedListLIFO<T> implements CustomList<T> {
     private DNode<T> head;
     private DNode<T> tail;
     private int size;
@@ -115,11 +115,11 @@ class DoublyLinkedList<T> implements CustomList<T> {
     public boolean isEmpty() { return size == 0; }
 }
 
-class SinglyToDoublyAdapter<T> implements CustomList<T> {
-    private final DoublyLinkedList<T> doublyList;
+class SinglyToDoublyAdapterLIFO<T> implements CustomList<T> {
+    private final DoublyLinkedListLIFO<T> doublyList;
 
-    public SinglyToDoublyAdapter(SinglyLinkedList<T> singlyList) {
-        this.doublyList = new DoublyLinkedList<>();
+    public SinglyToDoublyAdapterLIFO(SinglyLinkedListLIFO<T> singlyList) {
+        this.doublyList = new DoublyLinkedListLIFO<>();
         
         while (!singlyList.isEmpty()) {
             this.doublyList.append(singlyList.pop());
@@ -142,8 +142,10 @@ class SinglyToDoublyAdapter<T> implements CustomList<T> {
 class ListFactory {
 
     public enum ListType {
-        SINGLY,
-        DOUBLY
+        SINGLY_LIFO,
+        DOUBLY_LIFO,
+        SINGLY_FIFO,
+        DOUBLY_FIFO
     }
 
     private static final ListFactory INSTANCE = new ListFactory();
@@ -156,12 +158,14 @@ class ListFactory {
 
     public <T> CustomList<T> createList(ListType type) {
         return switch (type) {
-            case SINGLY -> new SinglyLinkedList<>();
-            case DOUBLY -> new DoublyLinkedList<>();
+            case SINGLY_LIFO -> new SinglyLinkedListLIFO<>();
+            case DOUBLY_LIFO -> new DoublyLinkedListLIFO<>();
+            case SINGLY_FIFO -> new SinglyLinkedListLIFO<>();
+            case DOUBLY_FIFO -> new DoublyLinkedListLIFO<>();
         };
     }
 
-    public <T> CustomList<T> adaptToDoubly(SinglyLinkedList<T> singlyList) {
-        return new SinglyToDoublyAdapter<>(singlyList);
+    public <T> CustomList<T> adaptToDoubly(SinglyLinkedListLIFO<T> singlyList) {
+        return new SinglyToDoublyAdapterLIFO<>(singlyList);
     }
 }
