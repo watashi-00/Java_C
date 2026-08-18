@@ -34,9 +34,42 @@ public class LinkedList <T> {
     }
 
     void append(Node<T> node) {
-        if(tail.equals(head)) {
-
+        if(node == null) return;
+        
+        if(head == null) {
+            head = node;
+            tail = node;
+            return;
         }
+
+        tail.next = node;
+        tail = node;
+
+    }
+
+    Node<T> pop() {
+        if(head == null) {
+            return null; 
+        }
+
+        if(tail == head) {
+            var temp = head;
+            this.head = null;
+            this.tail = null;
+            return temp;
+        }
+
+        Node<T> cur = head;
+
+        while (cur.next != tail) {
+            cur = cur.next;
+        }
+
+        Node<T> removedNode = tail;
+        tail = cur;
+        tail.next = null;
+
+        return removedNode;
     }
 
 }
