@@ -1,5 +1,7 @@
 package src.main.java.com.lab.dsa.list;
 
+import java.util.Objects;
+
 public class LinkedList <T> {
     Node <T> head;
     Node <T> tail;
@@ -31,6 +33,11 @@ public class LinkedList <T> {
         this.tail = tail;
     }
 
+    void append(Node<T> node) {
+        if(tail.equals(head)) {
+
+        }
+    }
 
 }
 
@@ -50,5 +57,22 @@ class Node <T> {
 
     public Node<T> getNext() {
         return next;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        // the same reference in heap
+        if (this == obj) return true;
+
+        // is null or not an instance of Node
+        if (!(obj instanceof Node<?> other)) return false;
+
+        return Objects.equals(this.content, other.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(content);
     }
 }
