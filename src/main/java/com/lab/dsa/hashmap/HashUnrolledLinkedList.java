@@ -5,17 +5,29 @@ import java.util.List;
 
 public class HashUnrolledLinkedList <K> {
     private final Object[] list;
+    private int size;
     
     HashUnrolledLinkedList() {
         this.list = new Object[8];
     }
 
     void append(K element) {
-        int hash = element.hashCode() %  list.length;
+        int hash = element.hashCode() & (list.length - 1); // only pow of 2
 
-        System.out.println(hash);
+        if(list[hash] == null){
+            list[hash] = element;
+            return;
+        }
+        System.out.println("Collision");
 
     }
 
+    @SuppressWarnings("unchecked")
+    K get(int i) {
+        if(i >= list.length || i < 0){
+            throw new ArrayIndexOutOfBoundsException("Index out of bounds");
+        }
+        return (K) list[i];
+    }
 
 }
