@@ -18,16 +18,27 @@ public class HashUnrolledLinkedList <K> {
             list[hash] = element;
             return;
         }
+
         System.out.println("Collision");
 
     }
 
     @SuppressWarnings("unchecked")
     K get(int i) {
-        if(i >= list.length || i < 0){
+        if(i >= size || i < 0){
             throw new ArrayIndexOutOfBoundsException("Index out of bounds");
         }
-        return (K) list[i];
+
+        if(i <= list.length){
+            return (K) list[i];
+        }
+
+        return getFromIntern(i);
+    }
+
+    @SuppressWarnings("unchecked")
+    private K getFromIntern(int i) {
+        return  (K) list[i];
     }
 
 }
