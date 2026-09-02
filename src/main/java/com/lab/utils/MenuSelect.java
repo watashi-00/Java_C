@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 
 public @interface MenuSelect {
-    String label() default "unnamed";   
+    String label() default "unnamed";
 }

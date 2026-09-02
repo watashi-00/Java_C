@@ -3,9 +3,10 @@ package com.lab;
 import java.util.HashMap;
 import java.util.function.Function;
 
-interface Menu <K, V, I> {
+interface Menu<K, V, I> {
 
-    HashMap<K,V> getMap();
+    HashMap<K, V> getMap();
+
     Function<K, I> indexer();
 
     default V select(I index) {

@@ -1,5 +1,8 @@
 package com.lab;
 
+import com.lab.utils.Lab;
+import com.lab.utils.MenuSelect;
+
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -8,9 +11,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import com.lab.utils.Lab;
-import com.lab.utils.MenuSelect;
 
 public class Main {
 
@@ -30,24 +30,24 @@ public class Main {
     void init() {
         config();
 
-        for (;;) {
+        for (; ; ) {
             System.out.println("Select using number before name. -1 to close");
 
-            for(var entry : actions.getMap().entrySet()) {
+            for (var entry : actions.getMap().entrySet()) {
                 System.out.println(entry.getKey());
             }
 
             System.out.print("> ");
 
-            while(!scanner.hasNextInt()) {
-                System.out.println("Please input a number between 0 and " + (actions.getMap().size()-1));
+            while (!scanner.hasNextInt()) {
+                System.out.println("Please input a number between 0 and " + (actions.getMap().size() - 1));
                 scanner.nextLine();
             }
 
             int i = scanner.nextInt();
             scanner.nextLine();
 
-            if(i == -1) {
+            if (i == -1) {
                 return;
             }
 
@@ -82,7 +82,8 @@ public class Main {
 
                 String label = k.getAnnotation(MenuSelect.class).label();
                 actions.put(new EntryMenu(i, label), action);
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+                     NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -90,8 +91,8 @@ public class Main {
 
     private List<Class<?>> prepareClassList(Class<? extends Annotation> annotation, Class<?> interfaceClass) {
         var list = new ArrayList<Class<?>>();
-        for(var k : classList)
-            if(k.isAnnotationPresent(annotation) && interfaceClass.isAssignableFrom(k))
+        for (var k : classList)
+            if (k.isAnnotationPresent(annotation) && interfaceClass.isAssignableFrom(k))
                 list.add(k);
 
         return list;
@@ -116,7 +117,7 @@ public class Main {
         }
     }
 
-    public void config(){
+    public void config() {
         warmupClassList();
         List<Class<?>> labClasses = prepareClassList(MenuSelect.class, Lab.class);
         prepareLabClassList(labClasses);
@@ -124,10 +125,10 @@ public class Main {
 
     void recursiveScan(File directory, String pkg, List<Class<?>> classes) throws Exception {
         File[] files = directory.listFiles();
-        if(files == null) return;
+        if (files == null) return;
 
-        for(File file : files) {
-            if(file.isDirectory()) {
+        for (File file : files) {
+            if (file.isDirectory()) {
                 recursiveScan(file, pkg + "." + file.getName(), classes);
             } else if (file.getName().endsWith(".class")) {
                 String className = pkg + "." + file.getName().substring(0, file.getName().length() - 6);
@@ -135,5 +136,5 @@ public class Main {
             }
         }
     }
-    
+
 }
