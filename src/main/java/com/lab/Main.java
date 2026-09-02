@@ -6,11 +6,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 import com.lab.utils.Lab;
 import com.lab.utils.MenuSelect;
 
 public class Main {
+
+    Scanner scanner = new Scanner(System.in);
 
     interface Menu <K, V> {
 
@@ -26,11 +29,11 @@ public class Main {
 
     }
 
-    class MyMenu <K, V> implements Menu<K, V> {
+    class MenuActions <K, V> implements Menu<K, V> {
 
         private final HashMap<K, V> map;
 
-        MyMenu() {
+        MenuActions() {
             this.map = new HashMap<K, V>();
         }
 
@@ -48,7 +51,8 @@ public class Main {
 
 
     void init() {
-        var myMenu = new MyMenu<String, String>();
+        var actions = new MenuActions<String, Runnable>();
+        var menu    = new HashMap<Integer, String>();
 
         try {
 
@@ -76,8 +80,10 @@ public class Main {
 
             }
 
-            for(var k : labclass) {
+            for(int i = 0; i < labclass.size(); i++) {
+                var k = labclass.get(i);
                 Method[] methods = k.getDeclaredMethods();
+
                 Object instance = k.getDeclaredConstructor().newInstance();
 
 
@@ -90,9 +96,24 @@ public class Main {
                             throw new RuntimeException(e);
                         }
                     };
-                    action.run();
+                    String label = k.getAnnotation(MenuSelect.class).label();
+                    actions.put(label, action);
+                    menu.put(i, label);
                 }
+
             }
+
+            menu.forEach((k, v) -> {
+                System.out.println(k + ": " + v);
+            });
+
+            System.out.println("Select using number before name");
+
+            if(scanner.hasNextInt()) {
+                var action = actions.select(menu.get(scanner.nextInt()));
+                action.run();
+            }
+            
 
         } catch (Exception e) {
             //ignore all
