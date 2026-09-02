@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Function;
 
 import com.lab.utils.Lab;
 import com.lab.utils.MenuSelect;
@@ -15,12 +16,19 @@ public class Main {
 
     Scanner scanner = new Scanner(System.in);
 
-    interface Menu <K, V> {
+    interface Menu <K, V, I> {
 
         HashMap<K,V> getMap();
+        Function<K, I> indexer();
 
-        default V select(K key) {
-            return getMap().get(key);
+        default V select(I index) {
+            for (var entry : getMap().entrySet()) {
+                if (indexer().apply(entry.getKey()).equals(index)) {
+                    return entry.getValue();
+                }
+            }
+
+            return null;
         }
 
         default void put(K key, V value) {
@@ -29,30 +37,43 @@ public class Main {
 
     }
 
-    class MenuActions <K, V> implements Menu<K, V> {
+    class MenuActions <K, V, I> implements Menu<K, V, I> {
 
         private final HashMap<K, V> map;
-
-        MenuActions() {
+        private final Function<K, I> indexer;
+        MenuActions(Function<K, I> indexer) {
             this.map = new HashMap<K, V>();
+            this.indexer = indexer;
         }
 
         @Override
         public HashMap<K, V> getMap() {
             return this.map;
         }
+
+        @Override
+        public Function<K, I> indexer() {
+            return indexer;
+        }
     }
+
+    record EntryMenu (int index, String label) {
+        @Override
+        public String toString() {
+            return "> " + index + ": " + label;
+        }
+    }
+
 
     public static void main(String[] args) {
         System.out.println("Hello world!");
-
         new Main().init();
     }
 
-
     void init() {
-        var actions = new MenuActions<String, Runnable>();
-        var menu    = new HashMap<Integer, String>();
+        var actions = new MenuActions<EntryMenu, Runnable, Integer>(
+                EntryMenu::index
+        );
 
         try {
 
@@ -67,25 +88,22 @@ public class Main {
 
             if (resource != null) {
                 File directory = new File(resource.toURI());
-                if (directory.exists()) {
-                    this.recursiveScan(directory, pkg, clazzs);
-                }
+                if (!directory.exists())
+                    return;
+
+                this.recursiveScan(directory, pkg, clazzs);
+
             }
 
-            for(var k : clazzs) {
-                
-                if(k.isAnnotationPresent(MenuSelect.class) && Lab.class.isAssignableFrom(k)) {
+            for(var k : clazzs)
+                if(k.isAnnotationPresent(MenuSelect.class) && Lab.class.isAssignableFrom(k))
                     labclass.add(k);
-                }
-
-            }
 
             for(int i = 0; i < labclass.size(); i++) {
                 var k = labclass.get(i);
                 Method[] methods = k.getDeclaredMethods();
 
                 Object instance = k.getDeclaredConstructor().newInstance();
-
 
                 for(var m : methods) {
                     if(!m.getName().equals("run")) continue;
@@ -97,26 +115,39 @@ public class Main {
                         }
                     };
                     String label = k.getAnnotation(MenuSelect.class).label();
-                    actions.put(label, action);
-                    menu.put(i, label);
+                    actions.put(new EntryMenu(i, label), action);
                 }
 
             }
 
-            menu.forEach((k, v) -> {
-                System.out.println(k + ": " + v);
-            });
+            for (;;) {
+                System.out.println("Select using number before name. -1 to close");
 
-            System.out.println("Select using number before name");
+                for(var entry : actions.getMap().entrySet()) {
+                    System.out.println(entry.getKey());
+                }
 
-            if(scanner.hasNextInt()) {
-                var action = actions.select(menu.get(scanner.nextInt()));
-                action.run();
+                System.out.print("> ");
+
+                while(!scanner.hasNextInt()) {
+                    System.out.println("Please input a number between 0 and " + (actions.getMap().size()-1));
+                    scanner.nextLine();
+                }
+
+                int i = scanner.nextInt();
+                scanner.nextLine();
+
+                if(i == -1) {
+                    return;
+                }
+
+                var action = actions.select(i);
+                if (action != null) action.run();
+
             }
-            
 
-        } catch (Exception e) {
-            //ignore all
+            } catch (Exception e) {
+                //ignore all
         }
 
     }
