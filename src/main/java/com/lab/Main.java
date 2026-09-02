@@ -1,8 +1,8 @@
 package com.lab;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +69,9 @@ public class Main {
             }
 
             for(var k : clazzs) {
-                System.out.println(k);
+                Method[] methods = k.getMethods();
+
+                
             }
 
         } catch (Exception e) {
