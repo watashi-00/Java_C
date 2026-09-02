@@ -2,6 +2,7 @@ package com.lab;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ public class Main {
 
     Scanner scanner = new Scanner(System.in);
     String pkg = "com.lab";
+    MenuActions<EntryMenu, Runnable, Integer> actions = new MenuActions<>(
+            EntryMenu::index
+    );
 
     List<Class<?>> classList = new ArrayList<>();
 
@@ -24,67 +28,59 @@ public class Main {
     }
 
     void init() {
-        var actions = new MenuActions<EntryMenu, Runnable, Integer>(
-                EntryMenu::index
-        );
+        config();
 
-        try {
+        for (;;) {
+            System.out.println("Select using number before name. -1 to close");
 
-            config();
+            for(var entry : actions.getMap().entrySet()) {
+                System.out.println(entry.getKey());
+            }
 
-            List<Class<?>> labClasses = prepareClassList(MenuSelect.class, Lab.class);
+            System.out.print("> ");
 
-            for(int i = 0; i < labClasses.size(); i++) {
+            while(!scanner.hasNextInt()) {
+                System.out.println("Please input a number between 0 and " + (actions.getMap().size()-1));
+                scanner.nextLine();
+            }
+
+            int i = scanner.nextInt();
+            scanner.nextLine();
+
+            if(i == -1) {
+                return;
+            }
+
+            var action = actions.select(i);
+            if (action != null) action.run();
+
+        }
+
+    }
+
+    private void prepareLabClassList(List<Class<?>> labClasses) {
+        for (int i = 0; i < labClasses.size(); i++) {
+            try {
                 var k = labClasses.get(i);
-                Method[] methods = k.getDeclaredMethods();
 
                 Object instance = k.getDeclaredConstructor().newInstance();
 
-                for(var m : methods) {
-                    if(!m.getName().equals("run")) continue;
-                    Runnable action = () -> {
-                        try {
-                            m.invoke(instance);
-                        } catch ( Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    };
-                    String label = k.getAnnotation(MenuSelect.class).label();
-                    actions.put(new EntryMenu(i, label), action);
-                }
+                Method m = k.getDeclaredMethod("run");
 
+                Runnable action = () -> {
+                    try {
+                        m.invoke(instance);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                };
+
+                String label = k.getAnnotation(MenuSelect.class).label();
+                actions.put(new EntryMenu(i, label), action);
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
             }
-
-            for (;;) {
-                System.out.println("Select using number before name. -1 to close");
-
-                for(var entry : actions.getMap().entrySet()) {
-                    System.out.println(entry.getKey());
-                }
-
-                System.out.print("> ");
-
-                while(!scanner.hasNextInt()) {
-                    System.out.println("Please input a number between 0 and " + (actions.getMap().size()-1));
-                    scanner.nextLine();
-                }
-
-                int i = scanner.nextInt();
-                scanner.nextLine();
-
-                if(i == -1) {
-                    return;
-                }
-
-                var action = actions.select(i);
-                if (action != null) action.run();
-
-            }
-
-        } catch (Exception e) {
-            //ignore all
         }
-
     }
 
     private List<Class<?>> prepareClassList(Class<? extends Annotation> annotation, Class<?> interfaceClass) {
@@ -117,6 +113,8 @@ public class Main {
 
     public void config(){
         warmupClassList();
+        List<Class<?>> labClasses = prepareClassList(MenuSelect.class, Lab.class);
+        prepareLabClassList(labClasses);
     }
 
     void recursiveScan(File directory, String pkg, List<Class<?>> classes) throws Exception {
