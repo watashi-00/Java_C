@@ -51,6 +51,11 @@ public class Main {
                 return;
             }
 
+            if (i < 0 || i >= actions.getMap().size()) {
+                System.out.println("Invalid option.");
+                continue;
+            }
+
             var action = actions.select(i);
             if (action != null) action.run();
 
