@@ -88,7 +88,7 @@ public class Main {
 
 
                 for(var m : methods) {
-                    if(m.getName() != "run") continue;
+                    if(!m.getName().equals("run")) continue;
                     Runnable action = () -> {
                         try {
                             m.invoke(instance);
@@ -135,5 +135,4 @@ public class Main {
         }
     }
     
-
 }
