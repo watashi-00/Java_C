@@ -58,7 +58,7 @@ public class Main {
             List<Class<?>> clazzs = new ArrayList<>();
 
             if (resource != null) {
-                File directory = new File(resource.getFile());
+                File directory = new File(resource.toURI());
                 if (directory.exists()) {
                     this.recursiveScan(directory, pkg, clazzs);
                 }
@@ -90,7 +90,6 @@ public class Main {
                 clazzs.add(Class.forName(className));
             }
         }
-
     }
     
 
