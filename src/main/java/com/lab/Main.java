@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
+import com.lab.utils.Lab;
+import com.lab.utils.MenuSelect;
+
 public class Main {
 
     interface Menu <K, V> {
@@ -56,6 +61,7 @@ public class Main {
             URL resource    = classLoader.getResource(path);
 
             List<Class<?>> clazzs = new ArrayList<>();
+            List<Class<?>> labclass = new ArrayList<>();
 
             if (resource != null) {
                 File directory = new File(resource.toURI());
@@ -64,14 +70,30 @@ public class Main {
                 }
             }
 
-            if(clazzs.isEmpty()) {
-                System.out.println("anything");
+            for(var k : clazzs) {
+                
+                if(k.isAnnotationPresent(MenuSelect.class) && Lab.class.isAssignableFrom(k)) {
+                    labclass.add(k);
+                }
+
             }
 
-            for(var k : clazzs) {
-                Method[] methods = k.getMethods();
+            for(var k : labclass) {
+                Method[] methods = k.getDeclaredMethods();
+                Object instance = k.getDeclaredConstructor().newInstance();
 
-                
+
+                for(var m : methods) {
+                    if(m.getName() != "run") continue;
+                    Runnable action = () -> {
+                        try {
+                            m.invoke(instance);
+                        } catch ( Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    };
+                    action.run();
+                }
             }
 
         } catch (Exception e) {
