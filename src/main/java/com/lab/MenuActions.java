@@ -9,7 +9,7 @@ public class MenuActions<K, V, I> implements Menu<K, V, I> {
     private final Function<K, I> indexer;
 
     MenuActions(Function<K, I> indexer) {
-        this.map = new HashMap<K, V>();
+        this.map = new HashMap<>();
         this.indexer = indexer;
     }
 
