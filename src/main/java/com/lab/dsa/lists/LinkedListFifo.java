@@ -14,4 +14,15 @@ public class LinkedListFifo implements Lab {
 
     }
 
+    void append() {
+
+    }
+
+    public Node getHead() {
+        return head;
+    }
+
+    public Node getTail() {
+        return tail;
+    }
 }

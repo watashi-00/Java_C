@@ -21,10 +21,6 @@ public class LinkedListLifo implements Lab {
         System.out.println("Received " + this.pop().getEvent());
     }
 
-    public void append(byte value) {
-        this.append(new Node(value));
-    }
-
     public void append(Node node) {
         if (node == null) {
             return;
