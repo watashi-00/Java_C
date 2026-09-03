@@ -12,6 +12,8 @@ public class LinkedListFifo implements Lab {
     @Override
     public void run() {
 
+        System.out.println("Linked List: FIFO");
+
     }
 
     void append(Node node) {

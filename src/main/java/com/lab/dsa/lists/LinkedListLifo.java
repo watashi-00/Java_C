@@ -11,14 +11,14 @@ public class LinkedListLifo implements Lab {
 
     @Override
     public void run() {
-        System.out.println("executed");
+        System.out.println("Linked List: LIFO");
 
         this.append(new Node((byte)0));
         this.append(new Node((byte)1));
         this.append(new Node((byte)3));
         this.append(new Node((byte)4));
 
-        System.out.println("Received " + this.pop().getEvent());
+        System.out.println("RECEIVED " + this.pop().getEvent());
     }
 
     public void append(Node node) {
