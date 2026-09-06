@@ -2,7 +2,6 @@
 // Created by watashi on 9/6/26.
 //
 #include <stdio.h>
-
 #include <menu.h>
 
 static void multiply(void) {
