@@ -14,7 +14,7 @@ int main() {
 
     unsigned int input;
 
-    while (scanf("%u", &input) != 1 || input < 0 || input > i) {
+    while (scanf("%u", &input) != 1 || input < 0 || input >= i) {
         printf("Invalid input\n");
 
         int c;

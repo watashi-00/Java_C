@@ -8,6 +8,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 add_executable(app
     src/main.c
         src/operations/sum.c
+        src/operations/multiply.c
 )
 
 target_include_directories(app PRIVATE
