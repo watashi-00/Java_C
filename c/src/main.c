@@ -21,7 +21,9 @@ int main() {
         while ((c = getchar()) != '\n' && c != EOF);
     };
 
-    start[input].fn();
+    char *args[] = {"10", "20"};
+
+    start[input].fn(2, args);
 
     return 0;
 }

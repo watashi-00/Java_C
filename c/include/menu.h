@@ -1,6 +1,6 @@
 #pragma once
 
-typedef void (*menu_fn)(void);
+typedef void (*menu_fn)(int argc, char **argv);
 
 typedef struct {
     const char *label;

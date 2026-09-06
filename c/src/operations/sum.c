@@ -1,16 +1,18 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "menu.h"
 
-static void sum(void) {
-    int a = 1;
-    int b = 2;
+static void sum(int argc, char **argv) {
+    if (argc < 2) {
+        printf("Usage: sum <a> <b>\n");
+        return;
+    }
 
-    printf("> ");
-    scanf("%d", &a);
-    printf("> ");
-    scanf("%d", &b);
+    int a = atoi(argv[0]);
+    int b = atoi(argv[1]);
 
-    printf("%d + %d = %d", a, b, a+b);
+    printf("%d + %d = %d\n", a, b, a + b);
 }
 
 MENU("Sum a + b", sum);

@@ -2,18 +2,20 @@
 // Created by watashi on 9/6/26.
 //
 #include <stdio.h>
-#include <menu.h>
+#include <stdlib.h>
 
-static void multiply(void) {
-    int a = 1;
-    int b = 2;
+#include "menu.h"
 
-    printf("> ");
-    scanf("%d", &a);
-    printf("> ");
-    scanf("%d", &b);
+static void multiply(int argc, char **argv) {
+    if (argc < 2) {
+        printf("Usage: sum <a> <b>\n");
+        return;
+    }
 
-    printf("%d * %d = %d", a, b, a*b);
+    int a = atoi(argv[0]);
+    int b = atoi(argv[1]);
+
+    printf("%d * %d = %d\n", a, b, a * b);
 }
 
-MENU("multiply a * b", multiply);
+MENU("Multiply a * b", multiply);
