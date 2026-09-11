@@ -11,10 +11,12 @@ int main() {
     int i = 0;
     for (const reflect_entry *entry = start;
         (const char *)entry < (const char *)end; entry++, i++) {
+        #ifdef DEBUG
         printf("%d : %s\n", i, entry->label);
         printf("sizeof(reflect_entry) = %zu\n", sizeof(reflect_entry));
         printf("start = %p\n", (void *)start);
         printf("end   = %p\n", (void *)end);
+        #endif
     }
 
     const unsigned int input = getInput("> ", i);
