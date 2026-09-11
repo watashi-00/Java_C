@@ -84,7 +84,7 @@ typedef struct {
         function(ctx); \
     } \
     static const reflect_entry __reflect__##function \
-    __attribute__((used, section("reflect_entries"))) = { \
+    __attribute__((used, aligned(8), section("reflect_entries"))) = { \
         .label = entry_label, \
         .reflection = &__reflection_##reflection_name, \
         .fn = __reflect_call_##function \

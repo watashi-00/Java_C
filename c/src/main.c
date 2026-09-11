@@ -17,7 +17,6 @@ int main() {
         printf("end   = %p\n", (void *)end);
     }
 
-
     const unsigned int input = getInput("> ", i);
 
     const unsigned int i1 = getInput("first  number: ", 0);
@@ -31,7 +30,6 @@ int main() {
 
     return 0;
 }
-
 
 int getInput(const char label[], const int max) {
 
