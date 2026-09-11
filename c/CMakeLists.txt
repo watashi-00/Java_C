@@ -9,6 +9,7 @@ add_executable(app
     src/main.c
         src/operations/sum.c
         src/operations/multiply.c
+        src/reflection.c
 )
 
 target_include_directories(app PRIVATE

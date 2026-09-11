@@ -9,8 +9,12 @@ int main() {
     const reflect_entry *start =   __start_reflect_entries;
     const reflect_entry *end   =    __stop_reflect_entries;
     int i = 0;
-    for (const reflect_entry *entry = start; entry != end; entry++, i++) {
+    for (const reflect_entry *entry = start;
+        (const char *)entry < (const char *)end; entry++, i++) {
         printf("%d : %s\n", i, entry->label);
+        printf("sizeof(reflect_entry) = %zu\n", sizeof(reflect_entry));
+        printf("start = %p\n", (void *)start);
+        printf("end   = %p\n", (void *)end);
     }
 
 

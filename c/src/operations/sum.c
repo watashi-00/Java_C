@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "reflect.h"
 
+REFLECTION_DECLARE(Operations)
 typedef struct {
     int a;
     int b;
@@ -14,4 +14,5 @@ static void sum(ctx_t *ctx) {
     printf("%d + %d = %d\n", c->a, c->b, c->a + c->b);
 }
 
-REFLECT("Sum a + b", sum);
+
+REFLECT(Operations, "Sum a + b", sum);
