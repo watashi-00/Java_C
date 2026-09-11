@@ -1,18 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "menu.h"
+#include "reflect.h"
 
-static void sum(int argc, char **argv) {
-    if (argc < 2) {
-        printf("Usage: sum <a> <b>\n");
-        return;
-    }
+typedef struct {
+    int a;
+    int b;
+} sum_context;
 
-    int a = atoi(argv[0]);
-    int b = atoi(argv[1]);
+static void sum(ctx_t *ctx) {
+    sum_context *c = ctx->data;
 
-    printf("%d + %d = %d\n", a, b, a + b);
+    printf("%d + %d = %d\n", c->a, c->b, c->a + c->b);
 }
 
-MENU("Sum a + b", sum);
+REFLECT("Sum a + b", sum);

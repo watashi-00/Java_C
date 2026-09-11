@@ -4,18 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "menu.h"
+#include "reflect.h"
 
-static void multiply(int argc, char **argv) {
-    if (argc < 2) {
-        printf("Usage: sum <a> <b>\n");
-        return;
-    }
-
-    int a = atoi(argv[0]);
-    int b = atoi(argv[1]);
-
-    printf("%d * %d = %d\n", a, b, a * b);
+static void multiply(ctx_t *ctx) {
+    // int a = atoi(ctx[0]);
+    // int b = atoi(ctx[1]);
+    //
+    // printf("%d * %d = %d\n", a, b, a * b);
 }
 
-MENU("Multiply a * b", multiply);
+REFLECT("Multiply a * b", multiply);

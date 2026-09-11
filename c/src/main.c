@@ -1,14 +1,14 @@
 #include <stdio.h>
 
-#include "menu.h"
+#include "reflect.h"
 
 
 int main() {
 
-    const menu_entry *start =  __start_menu_entries;
-    const menu_entry *end   =   __stop_menu_entries;
+    const reflect_entry *start =   __start_reflect_entries;
+    const reflect_entry *end   =    __stop_reflect_entries;
     int i = 0;
-    for (const menu_entry *entry = start; entry != end; entry++, i++) {
+    for (const reflect_entry *entry = start; entry != end; entry++, i++) {
         printf("%d : %s\n", i, entry->label);
     }
 
@@ -21,9 +21,11 @@ int main() {
         while ((c = getchar()) != '\n' && c != EOF);
     };
 
-    char *args[] = {"10", "20"};
+    int values[] = {10, 20};
 
-    start[input].fn(2, args);
+    ctx_t ctx = { .data = values, .size = sizeof(values) / sizeof(values[0]) };
+
+    start[input].fn(&ctx);
 
     return 0;
 }

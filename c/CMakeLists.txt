@@ -14,3 +14,5 @@ add_executable(app
 target_include_directories(app PRIVATE
     include
 )
+
+target_compile_definitions(app PRIVATE DEBUG)
