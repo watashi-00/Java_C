@@ -2,6 +2,7 @@
 
 #include "reflect.h"
 
+static int getInput(const char label[], int max);
 
 int main() {
 
@@ -12,20 +13,38 @@ int main() {
         printf("%d : %s\n", i, entry->label);
     }
 
-    unsigned int input;
 
-    while (scanf("%u", &input) != 1 || input < 0 || input >= i) {
-        printf("Invalid input\n");
+    const unsigned int input = getInput("> ", i);
 
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);
-    };
+    const unsigned int i1 = getInput("first  number: ", 0);
+    const unsigned int i2 = getInput("second number: ", 0);
 
-    int values[] = {10, 20};
+    int values[] = {(int) i1, (int) i2};
 
     ctx_t ctx = { .data = values, .size = sizeof(values) / sizeof(values[0]) };
 
     start[input].fn(&ctx);
 
     return 0;
+}
+
+
+int getInput(const char label[], const int max) {
+
+    int input;
+
+    while (1) {
+
+        printf("%s", label);
+
+        if (scanf("%d", &input) == 1 &&
+            (max == 0 || input < max)) {
+            return input;
+            }
+
+        printf("Invalid input\n");
+
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
 }
