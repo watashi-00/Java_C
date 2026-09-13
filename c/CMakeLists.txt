@@ -10,6 +10,7 @@ add_executable(app
         src/operations/sum.c
         src/operations/multiply.c
         src/reflection.c
+        src/pointers/pointer.c
 )
 
 target_include_directories(app PRIVATE

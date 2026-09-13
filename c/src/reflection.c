@@ -5,3 +5,4 @@
 #include "reflect.h"
 
 REFLECTION_DEFINE(Operations)
+REFLECTION_DEFINE(Pointers)
