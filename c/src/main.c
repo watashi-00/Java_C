@@ -9,13 +9,16 @@ int main() {
     const reflect_entry *start =   __start_reflect_entries;
     const reflect_entry *end   =    __stop_reflect_entries;
     int i = 0;
-    for (const reflect_entry *entry = start;
-        (const char *)entry < (const char *)end; entry++, i++) {
+    long max = __stop_reflect_entries - __start_reflect_entries;
+    for (const reflect_entry *entry = start; i < max; entry++, i++) {
         printf("%d : %s\n", i, entry->label);
         #ifdef DEBUG_VERBOSE
         printf("sizeof(reflect_entry) = %zu\n", sizeof(reflect_entry));
         printf("start = %p\n", (void *)start);
         printf("end   = %p\n", (void *)end);
+
+        printf("max   = %p\n", (void *)max);
+
         #endif
     }
 
