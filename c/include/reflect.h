@@ -1,14 +1,17 @@
 #pragma once
 
-// #define DEBUG, use the CMakeLists to define DEBUG
-// target_compile_definitions(app PRIVATE DEBUG)
-
 #include <stdio.h>
 #include <stddef.h>
 
+/*
+ * DEBUG
+ *
+ * target_compile_definitions(app PRIVATE DEBUG)
+ */
+
 #ifdef DEBUG
 
-#define REFLECT_DEBUG(name, function, ctx) \
+#define RFL_HANDLER(name, function, ctx) \
     printf( \
         "[DEBUG] %s | fn=%s | ctx=%p | data=%p | size=%zu\n", \
         name, \
@@ -20,9 +23,13 @@
 
 #else
 
-#define REFLECT_DEBUG(name, function, ctx)
+#define RFL_HANDLER(name, function, ctx)
 
 #endif
+
+/*
+ * CONTEXT
+ */
 
 typedef struct ctx {
     void *data;
@@ -53,36 +60,30 @@ typedef struct {
     reflect_fn fn;
 } reflect_entry;
 
+
 /*
- * DECLARE REFLECTION
+ * REFLECT
  *
- * Makes a reflection visible to other translation units.
- */
-
-#define REFLECTION_DECLARE(reflection_name) \
-    extern const reflection_t __reflection_##reflection_name;
-
-/*
- * DEFINE REFLECTION
+ * Automatically creates:
  *
- * Creates the actual reflection object.
- */
-
-#define REFLECTION_DEFINE(reflection_name) \
-    const reflection_t __reflection_##reflection_name \
-    __attribute__((used, section("reflection_entries"))) = { \
-        .name = #reflection_name \
-    };
-
-/*
- * DEFINE REFLECTED FUNCTION
+ *   - reflection_t
+ *   - reflected function wrapper
+ *   - reflect_entry
+ *
+ * and places them into their respective registries.
  */
 
 #define REFLECT(reflection_name, entry_label, function) \
+    static const reflection_t __reflection_##reflection_name \
+    __attribute__((used, section("reflection_entries"))) = { \
+        .name = #reflection_name \
+    }; \
+    \
     static void __reflect_call_##function(ctx_t *ctx) { \
-        REFLECT_DEBUG(entry_label, function, ctx); \
+        RFL_HANDLER(entry_label, function, ctx); \
         function(ctx); \
     } \
+    \
     static const reflect_entry __reflect__##function \
     __attribute__((used, aligned(8), section("reflect_entries"))) = { \
         .label = entry_label, \

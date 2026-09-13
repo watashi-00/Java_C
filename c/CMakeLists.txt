@@ -9,12 +9,13 @@ add_executable(app
     src/main.c
         src/operations/sum.c
         src/operations/multiply.c
-        src/reflection.c
-        src/pointers/pointer.c
 )
 
 target_include_directories(app PRIVATE
     include
 )
 
-target_compile_definitions(app PRIVATE DEBUG)
+target_compile_definitions(app PRIVATE
+        DEBUG,
+        #DEBUG_VERBOSE
+        )

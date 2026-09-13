@@ -2,7 +2,6 @@
 
 #include "reflect.h"
 
-REFLECTION_DECLARE(Operations)
 typedef struct {
     int a;
     int b;

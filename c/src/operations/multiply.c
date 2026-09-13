@@ -5,7 +5,6 @@
 
 #include "reflect.h"
 
-REFLECTION_DECLARE(Operations)
 static void multiply(ctx_t *ctx) {
     // int a = atoi(ctx[0]);
     // int b = atoi(ctx[1]);
